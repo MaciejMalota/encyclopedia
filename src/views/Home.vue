@@ -1,18 +1,31 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  SIEMA
+    </div>
+<!-- <star-rating @update:rating ="setRating" increment="0.5"></star-rating> -->
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+// import StarRating from 'vue-star-rating';
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  // components: {StarRating},
+  beforeCreate() {
+    // do body background w global.css
+    document.body.className = "home";
+  },
+  data() {
+    return {
+      rating: 0,
+    };
+  },
+  methods: {
+  
+  },
+};
 </script>
+
+<style scoped>
+
+</style>>
+
+
