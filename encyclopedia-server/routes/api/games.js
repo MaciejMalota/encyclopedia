@@ -5,6 +5,7 @@ const Game = require("../../model/Game");
 const Genre = require("../../model/Genre");
 const User = require("../../model/User");
 const Platform = require("../../model/Platform");
+const GameComment = require("../../model/GameComment");
 
 
 
@@ -12,13 +13,47 @@ const Platform = require("../../model/Platform");
 
 router.get("/", async (req, res) => {
   try {
-    const gameListItems = await Game.find().populate("genres").populate("platforms");
-
+    const gameListItems = await Game.find().populate("genres").populate("platforms").populate("game_comments");
+    
     if (!gameListItems) throw new Error("No gameListItems");
     const sorted = gameListItems.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
     res.status(200).json(sorted);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.post("/addcomment", async (req, res) => {
+  const newGameComment = new GameComment(req.body);
+ 
+  try {
+   // id komentarza console.log(newGameComment._id);
+   //console.log(newGameComment)
+   const gameCommentArray = await Game.findById(newGameComment.gameId).populate("game_comments")
+ // console.log(gameCommentArray.game_comments[0].userId)  tablica gry z id Postów
+ let  y=0;
+ 
+  gameCommentArray.game_comments.forEach(item=>
+    { //console.log(item.userId)
+     
+      if(item.userId.toString()==newGameComment.userId.toString())y=1;
+    })
+    console.log(y)
+   // console.log(newGameComment.userId.toString()==gameCommentArray.game_comments[0].userId.toString())
+    
+    if(y!=1){
+      
+      gameCommentArray.game_comments.push(newGameComment._id);
+      await gameCommentArray.save();
+      const commentListItem = await newGameComment.save();
+      res.status(200).json(commentListItem);}
+      else{
+        console.log('Already did comment')
+     
+      throw new Error("Something went wrong saving the commentListItem");
+      }
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -60,7 +95,9 @@ router.post("/rate", async (req, res) => {
 router.post("/:id", async (req, res) => {
     const { id } = req.params;
   try {
-    const game = await Game.findById(id).populate("genres").populate("platforms");
+   
+    const game = await Game.findById(id).populate("genres").populate("platforms").populate("game_comments");
+    // const comment = await GameComment.findById(req.body.gameId).populate("game_comments")
     res.status(200).json(game);
     
   } catch (error) {
@@ -136,6 +173,10 @@ router.get("/platforms", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+//COMMENTS
+
+
+
 
 
 // router.post('/', async (req, res) => {

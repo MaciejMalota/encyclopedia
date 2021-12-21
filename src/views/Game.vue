@@ -7,8 +7,8 @@
       @error="imageUrlAlt"
       alt="./assets/noimage.png"
     />
-  <star-rating  v-if="isLoggedIn && x==0 "  @update:rating ="setRating" increment="0.5"></star-rating>
-  <star-rating   v-else  v-model:rating="this.overallrating"   increment="0.01" read-only="true"></star-rating>
+  <star-rating  v-if="isLoggedIn && x==1  "  @update:rating ="setRating" increment="0.5"></star-rating>
+  <star-rating   v-else  v-model:rating="this.overallrating"   increment="0.1" read-only="true"></star-rating>
 
 
     </div>
@@ -65,6 +65,30 @@
 
     
   </div>
+
+  <div class="commentSection" v-if="isLoggedIn">
+    <div class="boxsizingBorder">
+ <textarea name="comment" id="comment" style="width:100%" rows="6" ></textarea>
+
+    </div>
+     
+
+   <button >Dodaj komentarz</button>
+  </div>
+
+  <!-- <div  class="commentsSection"> -->
+    <div class="comment">
+      <b style="font-size: large;">Maciek</b>: 2021/11/28 <br>
+    Uważam ze gra jest świetna  
+    </div>
+
+    <div class="comment">
+      Maciek: 2021/11/28 <br>
+    Uważam ze gra jest świetna  
+    </div>
+    
+
+  <!-- </div> -->
   
 </template>
 <script>
@@ -86,7 +110,8 @@ export default {
       day: "",
       month: "",
       year: "",
-      rating: 5,
+      rating: 0,
+      comment_content:"",
       overallrating:0
     };
   },
@@ -104,7 +129,7 @@ export default {
         this.month = this.game.release_date.slice(5, 7);
         this.year = this.game.release_date.slice(0, 4);
         
-          let x=0;
+          let x=0; //do poprawy
        this.game.users.forEach(item=>
       { 
          if(item==this.user._id)x=1;
@@ -139,6 +164,34 @@ export default {
 };
 </script>
 <style scoped>
+.commentSection{
+margin-top: 5%;
+resize: none;
+
+}
+#comment{
+  resize: none;
+}
+.commentsSection{
+margin-top: 5%;
+  border-top: 1px solid #e4ddc7;
+  color: black;
+  background: ivory;
+}
+.comment{
+border-bottom: 1px solid black;
+padding: 10px;
+margin-top: 10px;
+
+  border-top: 1px solid #e4ddc7;
+  color: black;
+  background: ivory;
+}
+.boxsizingBorder {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
 .multi-p {
   padding: 5px;
   margin: 0 8px 5px 0;
