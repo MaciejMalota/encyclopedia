@@ -59,6 +59,47 @@ router.post("/addcomment", async (req, res) => {
   }
 });
 
+router.delete("/deletecomment/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const removed = await GameComment.findByIdAndDelete(id);
+    
+    const x = await Game.findById(removed.gameId)
+   
+    x.game_comments.forEach(function(element, index, object) {
+      if(element==id)
+      object.splice(index, 1);
+    });
+    console.log(x._id)
+   
+    const a =  {
+      game_comments: x.game_comments
+    }
+
+    await Game.findByIdAndUpdate(x._id, a)
+   
+    if (!removed) throw Error("Something went wrong");
+    res.status(200).json(removed);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+router.post("/updatecomment", async (req, res) => {
+  
+  try {
+    const response = await GameComment.findByIdAndUpdate(
+      req.body.cmnt._id,
+      req.body.cmnt
+    );
+
+    if (!response) throw Error("Something went wrong");
+    const updated = { ...response._doc, ...req.body.usr };
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/rate", async (req, res) => {
   try {
     // const { id } = req.body.gameId;
@@ -96,7 +137,16 @@ router.post("/:id", async (req, res) => {
     const { id } = req.params;
   try {
    
-    const game = await Game.findById(id).populate("genres").populate("platforms").populate("game_comments");
+    const game = await Game.findById(id)
+    .populate("genres")
+    .populate("platforms")
+    .populate({
+      path : 'game_comments',
+      populate : {
+        path : 'userId'
+      }
+    })
+    .exec();
     // const comment = await GameComment.findById(req.body.gameId).populate("game_comments")
     res.status(200).json(game);
     
@@ -196,5 +246,9 @@ router.get("/platforms", async (req, res) => {
 //         res.status(500).json({ message: error.message })
 //     }
 // })
+
+//SEARCH
+
+
 
 module.exports = router;
