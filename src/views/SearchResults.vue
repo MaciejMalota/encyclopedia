@@ -1,39 +1,6 @@
 <template>
   <div class="container2">
-    <p v-if="user.permission >= 2">
-      <router-link to="/addgame">
-        <button
-          type="button"
-          class="btn btn-success"
-          id="add_Game"
-          style="padding: 5px"
-        >
-          DODAJ GRE
-        </button>
-      </router-link>
-    </p>
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="dropdownMenuButton1"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <template v-if="this.selected == ''"> Genre </template>
-        <template v-else>{{ this.selected }}</template>
-      </button>
-
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li
-          @click="selectedGenre(genre)"
-          v-for="genre in genres"
-          :key="genre._id"
-        >
-          <a class="dropdown-item" href="#">{{ genre.name }}</a>
-        </li>
-      </ul>
-    </div>
+ 
 
     <div
       class="card text-white bg-dark mb-3"
@@ -41,7 +8,10 @@
       :key="game._id"
     >
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        <img class="card-img-top" :src="game.img" />
+        <img
+          class="card-img-top"
+          :src="game.img"
+        />
         <a href="#!">
           <div
             class="mask"
@@ -61,7 +31,7 @@
         <h3 class="card-title">{{ game.title }}</h3>
 
         <router-link
-          :to="{ name: 'game', params: { gameId: game._id } }"
+          :to="{ name: 'game' , params: { gameId: game._id } }"
           type="button"
           class="btn btn-primary"
           id="btn2"
@@ -78,26 +48,24 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      genres: [],
+      // genres: [],
       games: [],
-      selected: "",
     };
   },
   async mounted() {
-    const response = await axios.get("api/games/");
+  
+   const response = await axios.post("api/games/result/"+this.getParam('search'));
     this.games = response.data;
-    const response2 = await axios.get("api/games/genres");
-    this.genres = response2.data;
+
+
   },
   computed: {
     ...mapGetters(["isLoggedIn", "user"]),
   },
   methods: {
-    async selectedGenre(genre) {
-      this.selected = genre.name;
-      const response = await axios.get("api/games/genres/"+genre._id );
-      this.games= response.data
-    },
+    getParam(param){
+  return new URLSearchParams(window.location.search).get(param);
+}
   },
   beforeCreate() {
     // do body background w global.css
@@ -107,23 +75,9 @@ export default {
 </script>
 
 <style scoped>
-.dropdown {
-  margin-top: 2em;
-}
-.card-title {
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .card {
   margin: auto;
-  height: 24rem;
+  height: 31rem;
   text-align: center;
   width: 18rem;
   background: #858585b3;
@@ -137,13 +91,10 @@ export default {
 } */
 
 .card img {
-  width: 100%;
-  height: 100%;
-  max-width: 250px;
-  max-height: 155px;
-  object-fit: cover;
+  width: 250px;
+  height: 300px;
+
   margin: 15px 15px 0px 15px;
-  /* background img - ustawic jako , oraz zcentrowac */
 }
 /* .card-img-top {
   width: 100%;
@@ -182,7 +133,7 @@ export default {
   min-width: 24rem;
   min-height: 100vh;
   padding: 10px;
-
+  
   background: #858585b3;
   -webkit-backdrop-filter: blur(1px);
   backdrop-filter: blur(1px);

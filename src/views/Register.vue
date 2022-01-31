@@ -63,6 +63,7 @@
   <div class="submit">
     <button>Create an Account</button>
   </div>
+ 
 </form>
 
 
@@ -167,6 +168,8 @@ export default {
   .submit {
     text-align: center;
   }
+
+
   .error {
     color: #ff0062;
     margin-top: 10px;

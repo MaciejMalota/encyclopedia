@@ -27,8 +27,23 @@
   <div class="submit">
     <button>Log In </button>
     <br>
-    <router-link to="/register">Need account ?</router-link>
+
+
   </div>
+
+   <div  class="PWrequest">
+
+ <router-link to="/pwreset">
+      
+         Password Recovery
+    
+      </router-link>
+  </div>
+  <div class="PWrequest">
+<router-link to="/register">Need account ?</router-link>
+
+  </div>
+  
 </form>
 
 
@@ -117,7 +132,7 @@ export default {
      background: crimson;
     border: 0;
     padding: 10px 20px;
-    margin-top: 20px;
+    margin-top: 5px;
     color: white;
     border-radius: 20px;
   }
@@ -129,5 +144,11 @@ export default {
     margin-top: 10px;
     font-size: 0.8em;
     font-weight: bold;
+  }
+    .PWrequest {
+    text-align: center;
+  }
+  .pwrecovery{
+background: green;
   }
 </style>

@@ -11,9 +11,7 @@
          <li class="nav-item">
           <a class="nav-link active" aria-current="page"><router-link to="/Encyclopedia">Encyclopedia</router-link></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page"><router-link to="/Top10">Top10</router-link></a>
-        </li>
+      
         <li class="nav-item"  v-if="isLoggedIn">
           <a class="nav-link active" ><router-link to="/profile">Profile </router-link></a>
         </li>
@@ -37,9 +35,9 @@
       <li class="nav-item admin d-flex"  v-if="isLoggedIn ">
           <a class="nav-link active"  style="color:crimson; cursor:pointer; text-transform: capitalize; float: right !important;margin:0 auto;" >Welcome  {{ user.username }}</a>
         </li>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+      <form  @submit.prevent="search" class="d-flex">
+        <input v-model="searchtitle" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button  class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
   </div>
@@ -50,8 +48,14 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  data() {
+    return {
+      searchtitle:""
+    }
+  },
   computed: {
     ...mapGetters(["isLoggedIn", "user", "isAdmin"])
   },
@@ -59,7 +63,12 @@ export default {
     ...mapActions(["logout"]),
     logoutUser() {
       this.logout();
-    }
+    },
+         search(){
+           window.location.replace("http://localhost:8080/searchresults?search="+this.searchtitle);
+
+
+              }
   }
 };
 </script>

@@ -6,6 +6,8 @@ const Genre = require("../../model/Genre");
 const User = require("../../model/User");
 const Platform = require("../../model/Platform");
 const GameComment = require("../../model/GameComment");
+const { ObjectId } = require('mongodb');
+
 
 
 
@@ -100,6 +102,22 @@ router.post("/updatecomment", async (req, res) => {
   }
 });
 
+router.post("/updategameinfo", async (req, res) => {
+  console.log(req.body.cmnt.game_content)
+  try {
+    const response = await Game.findByIdAndUpdate(
+      req.body.cmnt._id,
+      req.body.cmnt
+    );
+
+    if (!response) throw Error("Something went wrong");
+    const updated = { ...response._doc, ...req.body.usr };
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/rate", async (req, res) => {
   try {
     // const { id } = req.body.gameId;
@@ -117,6 +135,7 @@ router.post("/rate", async (req, res) => {
     if(x!=1){
        game.rating +=req.body.rating
        game.users.push(req.body.users);
+       game.overallrating= game.rating/game.users.length
        await game.save();}
        else{
          console.log('Already voted')
@@ -210,6 +229,45 @@ router.get("/genres", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+// router.post("/:id", async (req, res) => {
+//   const { id } = req.params;
+// try {
+ 
+//   const game = await Game.findById(id)
+//   .populate("genres")
+//   .populate("platforms")
+//   .populate({
+//     path : 'game_comments',
+//     populate : {
+//       path : 'userId'
+//     }
+//   })
+//   .exec();
+//   // const comment = await GameComment.findById(req.body.gameId).populate("game_comments")
+//   res.status(200).json(game);
+  
+// } catch (error) {
+//   res.status(404).json({ message: error.message });
+// }
+// });
+
+router.get("/genres/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  const _id = ObjectId(id);
+  try {
+    const genreListItems = await Game.find({genres : _id}).populate("genres");
+ 
+    if (!genreListItems) throw new Error("No genreListItems");
+    const sorted = genreListItems.sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+
+    res.status(200).json(sorted);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 //PLATFORMS
 router.get("/platforms", async (req, res) => {
   try {
@@ -249,6 +307,48 @@ router.get("/platforms", async (req, res) => {
 
 //SEARCH
 
+router.post("/result/:title", async (req, res) => {
+  try {
+    const  {title}  = req.params;
+   
+    const gameListItems = await Game.find({title: { $regex: '.*' + title + '.*', $options: 'i' } }).populate("genres").populate("platforms").populate("game_comments");
+   
+    if (!gameListItems) throw new Error("No gameListItems");
+    const sorted = gameListItems.sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    });
+    res.status(200).json(sorted);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
+router.get("/bestgames", async (req, res) => {
+  try {
+    const bestGamesListItems = await Game.find().populate("genres").sort({overallrating: -1});
+    if (!bestGamesListItems) throw new Error("No bestGamesListItems");
+    const genres = await Genre.find()
+    // const test = await Game.findOne({genres:'619e71bb9ca4b0b6b3585174'}  ).populate("genres").sort({overallrating: -1});
+
+    let tab=[];
+    for(const genre in genres){
+      
+    let test2= await Game.findOne({genres:genres[genre]._id}  ).populate("genres").sort({overallrating: -1}).exec();
+      test2.producer= genres[genre].name
+     
+      console.log(test2)
+     tab.push(test2);
+    }
+
+    const package = {
+      bestGamesListItems,
+      tab
+    }
+   
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 module.exports = router;

@@ -2,13 +2,15 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import Encyclopedia from "../views/Encyclopedia.vue";
-import Top10 from "../views/Top10.vue";
 import Profile from "../views/Profile.vue";
 import Login from "../views/Login.vue";
 import All_Users from "../views/All_Users.vue";
 import Game from "../views/Game.vue";
 import AddGame from "../views/AddGame.vue";
 import EmailVerif from "../views/EmailVerif.vue";
+import Pwreset from "../views/Pwreset.vue";
+import PwChange from "../views/PwChange.vue";
+import SearchResults from "../views/SearchResults.vue";
 import "/src/assets/css/global.css";
 import store from "../store/index";
 
@@ -22,6 +24,21 @@ const routes = [
     path: "/emailverif",
     name: "EmailVerif",
     component: EmailVerif,
+  },
+  {
+    path: "/pwreset",
+    name: "Pwreset",
+    component: Pwreset,
+  },
+  {
+    path: "/searchresults",
+    name: "SearchResults",
+    component: SearchResults,
+  },
+  {
+    path: "/pwchange/:token",
+    name: "PwChange",
+    component: PwChange,
   },
 
   {
@@ -44,12 +61,7 @@ const routes = [
 
     component: Encyclopedia,
   },
-  {
-    path: "/Top10",
-    name: "Top10",
 
-    component: Top10,
-  },
   {
     path: "/allusers",
     name: "All users",

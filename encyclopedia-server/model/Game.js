@@ -52,8 +52,11 @@ const GameSchema = new Schema({
     rating: {
         type: Number ,
         default:0,
-        // users_voted:[], 
-
+        required: true
+    },
+    overallrating: {
+        type: Number ,
+        default:0,
         required: true
     },
    
