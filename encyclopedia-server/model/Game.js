@@ -40,7 +40,7 @@ const GameSchema = new Schema({
          required: true
     },
     vote_up: {
-        type: Boolean,
+        type: Number,
         default:0,
         required: true
     },

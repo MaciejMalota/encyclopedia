@@ -90,20 +90,23 @@
       ></textarea>
     </div>
 
-    <button @click="addComment">Dodaj komentarz</button>
+    <button @click="addComment" name="btnAddcomment">Dodaj komentarz</button>
   </div>
 
   <!-- <div  class="commentsSection"> -->
     <div v-if="isLoggedIn">
+      
   <div class="comment"   v-for="comment in game.game_comments" :key="comment._id">
+    <div class="avatar"><img  :src= comment.userId.avatar_url alt="#" class="img-fluid"></div>
+    
     <b style="font-size: large"> {{ comment.userId.username }}</b
     >: {{ comment.created_at.slice(0, 10) }} <br />
     <p id="commentcontent" v-if="this.user._id==comment.userId._id" contenteditable="true">{{ comment.comment_content }}</p>
-    <p v-else>{{ comment.comment_content }}</p>
+    <p  v-else>{{ comment.comment_content }}</p>
     <div v-if="this.user._id==comment.userId._id || this.user.permission>1"> 
       
       <button class="btn btn-primary"  id="btnUpdate" @click="UpdateComment(comment)">Update</button>
-    <button class="btn btn-primary"  id="btn2"  @click="DeleteComment(comment)">Delete</button>
+    <button class="btn btn-primary"  id="btn2" name="btnDeleteComment" @click="DeleteComment(comment)">Delete</button>
     </div>
    
   </div>
@@ -232,6 +235,7 @@ export default {
 };
 </script>
 <style scoped>
+
 #btn2{
 margin-top: 4%;
    color: white;
@@ -337,6 +341,12 @@ img {
 object-fit: fill;
   border-style: solid;
 }
+.avatar >img {
+  all:initial;
+  max-height: 100px;
+  max-width:100px ;
+}
+
 .img_rate {
   float: right;
   clear: both;

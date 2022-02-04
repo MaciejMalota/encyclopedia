@@ -45,6 +45,11 @@ const UserSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    avatar_url:{
+        type:String,
+        default:"https://i.imgur.com/gHLtd3v.png"
+
     }
 });
 

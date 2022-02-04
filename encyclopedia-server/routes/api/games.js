@@ -336,7 +336,7 @@ router.get("/bestgames", async (req, res) => {
     let test2= await Game.findOne({genres:genres[genre]._id}  ).populate("genres").sort({overallrating: -1}).exec();
       test2.producer= genres[genre].name
      
-      console.log(test2)
+      
      tab.push(test2);
     }
 

@@ -9,7 +9,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
          <li class="nav-item">
-          <a class="nav-link active" aria-current="page"><router-link to="/Encyclopedia">Encyclopedia</router-link></a>
+          <a  name="encyclopedia" class="nav-link active" aria-current="page" ><router-link to="/Encyclopedia">Encyclopedia</router-link></a>
         </li>
       
         <li class="nav-item"  v-if="isLoggedIn">
@@ -27,7 +27,7 @@
           <a class="nav-link active"  style="color:crimson; cursor:pointer; text-transform: capitalize;"> <router-link to="/allusers">All users</router-link></a>
         </li>
           <li class="nav-item"  v-if="isLoggedIn">
-          <a to="/logout"  style="color:#16f; cursor:pointer;" class="nav-link"  @click.prevent="logoutUser">Log out</a>
+          <a name="LogoutUser" to="/logout"  style="color:#16f; cursor:pointer;" class="nav-link"  @click.prevent="logoutUser">Log out</a>
         </li>
           
     

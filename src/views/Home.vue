@@ -1,7 +1,7 @@
-<template>
+<template >
   <h1 style="color: white">Top Gry - Najpopularniejsze gry</h1>
 
-  <div class="wrapper" >
+  <div class="wrapper" v-if="checkValue" >
       
     <div class="box box1">
        <router-link :to="{ name: 'game' , params: { gameId: games[0]._id } }" >
@@ -218,6 +218,16 @@ export default {
      games: [],
      bestofGenres:[]
     };
+  },
+  computed: {
+   checkValue : function() {
+             if(this.games.length>0) {
+               
+               return true
+             }
+
+             return false
+        }
   },
   // async mounted() {
     

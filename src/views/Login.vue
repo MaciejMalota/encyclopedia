@@ -7,10 +7,11 @@
        type="text" 
        placeholder="Username"
        name="username"
-
+       minlength="3"
+       maxlength="21"
+       pattern="^[a-zA-Z0-9]{3,21}$"
        required
-        v-model="username">
-
+      v-model="username">
       <label for="password" >Password:</label>
       <input 
       type="password" 
@@ -20,15 +21,9 @@
       required 
       v-model="password">
  
-
-
-
-
-  <div class="submit">
-    <button>Log In </button>
+  <div class="submitt">
+    <button name="loginBtn" type="submit">Log In </button>
     <br>
-
-
   </div>
 
    <div  class="PWrequest">
@@ -136,7 +131,7 @@ export default {
     color: white;
     border-radius: 20px;
   }
-  .submit {
+  .submitt {
     text-align: center;
   }
   .error {

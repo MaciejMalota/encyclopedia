@@ -320,4 +320,20 @@ async function hashPassword(pass) {
   return hashedPassword;
 }
 
+router.post("/updateavatar", async (req, res) => {
+  
+  try {
+    const response = await User.findByIdAndUpdate(
+      req.body.cmnt._id,
+      req.body.cmnt
+    );
+
+    if (!response) throw Error("Something went wrong");
+    const updated = { ...response._doc, ...req.body.usr };
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;
